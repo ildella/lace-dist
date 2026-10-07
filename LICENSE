@@ -1,0 +1,40 @@
+# License — LACE (closed testing)
+
+Copyright (c) 2026 Davide della Monica. All rights reserved.
+
+LACE is experimental software, distributed in pre-release form for
+testing.
+
+## You may
+
+- Download and install the official artifacts in this repository.
+- Run LACE on your own machines, at your own risk.
+- Share feedback, bug reports, and your experiences with LACE.
+
+## You may not
+
+- Redistribute, host, or mirror the artifacts outside this repository.
+- Modify, decompile for competitive purposes, or create derivative works.
+- Hold the author liable for anything LACE does to your code, data,
+  accounts, or machine.
+
+## No warranty
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+
+## Third-party components
+
+Bundled JavaScript dependencies remain under their original licenses;
+notices ship inside the distribution.
+
+## Status
+
+Source code is not offered in this phase. If and when LACE is
+open-sourced, that license will supersede this one for the versions
+released under it.
