@@ -25,14 +25,17 @@ export LACE_HOME
 TMP_DIR=""
 
 # BASH_SOURCE, not $0: with `curl … | bash` $0 is `bash` and the cwd is
-# unreliable. BASH_SOURCE is empty there, so the lookup is relative to the cwd.
-# The `../libs` guard separates a real clone (script/install.sh beside
-# script/install.js, with the source tree behind it) from the extracted release
-# bundle, where install.sh ships next to the bundled install.js but has no
-# source tree — that one must still download and verify.
-SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+# unreliable. BASH_SOURCE is empty there, so we must not dereference it (under
+# `set -u` that would abort) and must not fall back to the cwd: doing so could
+# execute an unverified local install.js instead of downloading + verifying the
+# published bundle. Only treat this as a clone when BASH_SOURCE actually names
+# this file.
+SCRIPT_DIR=""
+if [ "${#BASH_SOURCE[@]}" -gt 0 ] && [ -n "${BASH_SOURCE[0]:-}" ]; then
+  SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+fi
 
-if [ -f "$SCRIPT_DIR/install.js" ] && [ -d "$SCRIPT_DIR/../libs" ]; then
+if [ -n "$SCRIPT_DIR" ] && [ -f "$SCRIPT_DIR/install.js" ] && [ -d "$SCRIPT_DIR/../libs" ]; then
   exec node "$SCRIPT_DIR/install.js" "$@"
 fi
 
