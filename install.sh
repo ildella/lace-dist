@@ -1,13 +1,40 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# LACE installer — the one installer. Two modes, chosen by where this file is:
+#
+#   clone mode — run from a clone (script/install.js beside this script):
+#     exec the dev installer directly.
+#   dist mode — fetched alone (the README one-liner): download the published
+#     bundle, verify it, extract into LACE_HOME, then run its installer.
+#
+# The constants below are asserted against libs/dist.js by
+# script/build-dist.js — that module is the source of truth; keep these in
+# sync there, never by templating this file at release time.
+NODE_FLOOR=22.19
+# LACE_VERSION=<tag> (e.g. v0.8.0-nightly.20261014) installs that release
+# instead of the latest stable one.
+if [ -n "${LACE_VERSION:-}" ] && [ -z "${LACE_DIST_BASE_URL:-}" ]; then
+  LACE_DIST_BASE_URL="https://github.com/ildella/lace-dist/releases/download/${LACE_VERSION}"
+fi
+DIST_RELEASE_BASE_URL="${LACE_DIST_BASE_URL:-https://github.com/ildella/lace-dist/releases/latest/download}"
 TARBALL_NAME="lace.tar.gz"
 CHECKSUMS_NAME="SHA256SUMS"
-NODE_FLOOR=22.19
-DIST_RELEASE_BASE_URL="${LACE_DIST_BASE_URL:-https://github.com/ildella/lace-dist/releases/latest/download}"
 LACE_HOME="${LACE_HOME:-$HOME/.lace}"
 export LACE_HOME
 TMP_DIR=""
+
+# BASH_SOURCE, not $0: with `curl … | bash` $0 is `bash` and the cwd is
+# unreliable. BASH_SOURCE is empty there, so the lookup is relative to the cwd.
+# The `../libs` guard separates a real clone (script/install.sh beside
+# script/install.js, with the source tree behind it) from the extracted release
+# bundle, where install.sh ships next to the bundled install.js but has no
+# source tree — that one must still download and verify.
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+
+if [ -f "$SCRIPT_DIR/install.js" ] && [ -d "$SCRIPT_DIR/../libs" ]; then
+  exec node "$SCRIPT_DIR/install.js" "$@"
+fi
 
 fail() {
   printf 'lace install: %s\n' "$1" >&2
@@ -85,7 +112,7 @@ main() {
   extract "$TMP_DIR"
   printf 'lace install: extracted into %s\n' "$LACE_HOME"
 
-  LACE_INSTALL_MODE=installed node "$LACE_HOME/install.js" "$@"
+  node "$LACE_HOME/install.js" "$@"
 }
 
 main "$@"
