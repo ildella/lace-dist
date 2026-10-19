@@ -5,12 +5,15 @@ operator-paced to fully automated.
 
 ## Requirements
 
+- **Node.js >= 22.19 on PATH — required** (check: `node -v`)
 - Linux or macOS (x64, arm64)
-- Node.js >= 22.19 on PATH
 - `curl` or `wget`
 - `sha256sum` or `shasum`
 - `tar`
-- `~/.local/bin` on PATH
+- `~/.local/bin` on PATH (the installer prints the line to add when missing)
+
+LACE does not bundle a Node runtime: upgrade your Node before installing if
+`node -v` is older than 22.19.
 
 ## Install
 
@@ -27,6 +30,18 @@ curl -fsSL https://github.com/ildella/lace-dist/releases/latest/download/install
 
 The installer records the tool paths and writes the systemd user units for your
 registered projects, then prints the one next step (`lace service start`).
+
+## First project
+
+From any repo — pnpm monorepo, single package, anything:
+
+```bash
+lace init            # register it; writes .lace/lace.jsonc (commit it)
+lace doctor          # check the machine and the project are ready
+lace service start   # start the always-on loops (systemd Linux)
+```
+
+No Yarn, no assumed package manager, no assumed tracker.
 
 ## Update
 
