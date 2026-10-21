@@ -8,7 +8,7 @@ set -euo pipefail
 #   dist mode — fetched alone (the README one-liner): download the published
 #     bundle, verify it, extract into LACE_HOME, then run its installer.
 #
-# The constants below are asserted against libs/dist.js by
+# The constants below are asserted against src/libs/dist.js by
 # script/build-dist.js — that module is the source of truth; keep these in
 # sync there, never by templating this file at release time.
 NODE_FLOOR=22.19
@@ -35,7 +35,7 @@ if [ "${#BASH_SOURCE[@]}" -gt 0 ] && [ -n "${BASH_SOURCE[0]:-}" ]; then
   SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 fi
 
-if [ -n "$SCRIPT_DIR" ] && [ -f "$SCRIPT_DIR/install.js" ] && [ -d "$SCRIPT_DIR/../libs" ]; then
+if [ -n "$SCRIPT_DIR" ] && [ -f "$SCRIPT_DIR/install.js" ] && [ -d "$SCRIPT_DIR/../src" ]; then
   exec node "$SCRIPT_DIR/install.js" "$@"
 fi
 
