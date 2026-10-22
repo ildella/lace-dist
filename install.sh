@@ -12,8 +12,8 @@ set -euo pipefail
 # script/build-dist.js — that module is the source of truth; keep these in
 # sync there, never by templating this file at release time.
 NODE_FLOOR=22.19
-# LACE_VERSION=<tag> (e.g. v0.8.0-nightly.20261014) installs that release
-# instead of the latest stable one.
+# LACE_VERSION=<tag> (e.g. v0.8.0) installs that release
+# instead of the latest one.
 if [ -n "${LACE_VERSION:-}" ] && [ -z "${LACE_DIST_BASE_URL:-}" ]; then
   LACE_DIST_BASE_URL="https://github.com/ildella/lace-dist/releases/download/${LACE_VERSION}"
 fi
