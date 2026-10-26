@@ -3,13 +3,13 @@ set -euo pipefail
 
 # LACE installer — the one installer. Two modes, chosen by where this file is:
 #
-#   clone mode — run from a clone (script/install.js beside this script):
+#   clone mode — run from a clone (script/install/index.js in this script's folder):
 #     exec the dev installer directly.
 #   dist mode — fetched alone (the README one-liner): download the published
 #     bundle, verify it, extract into LACE_HOME, then run its installer.
 #
 # The constants below are asserted against src/libs/dist.js by
-# script/build-dist.js — that module is the source of truth; keep these in
+# script/dist/build.js — that module is the source of truth; keep these in
 # sync there, never by templating this file at release time.
 NODE_FLOOR=22.19
 # LACE_VERSION=<tag> (e.g. v0.8.0) installs that release
@@ -27,7 +27,7 @@ TMP_DIR=""
 # BASH_SOURCE, not $0: with `curl … | bash` $0 is `bash` and the cwd is
 # unreliable. BASH_SOURCE is empty there, so we must not dereference it (under
 # `set -u` that would abort) and must not fall back to the cwd: doing so could
-# execute an unverified local install.js instead of downloading + verifying the
+# execute an unverified local installer instead of downloading + verifying the
 # published bundle. Only treat this as a clone when BASH_SOURCE actually names
 # this file.
 SCRIPT_DIR=""
@@ -35,8 +35,8 @@ if [ "${#BASH_SOURCE[@]}" -gt 0 ] && [ -n "${BASH_SOURCE[0]:-}" ]; then
   SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 fi
 
-if [ -n "$SCRIPT_DIR" ] && [ -f "$SCRIPT_DIR/install.js" ] && [ -d "$SCRIPT_DIR/../src" ]; then
-  exec node "$SCRIPT_DIR/install.js" "$@"
+if [ -n "$SCRIPT_DIR" ] && [ -f "$SCRIPT_DIR/install/index.js" ] && [ -d "$SCRIPT_DIR/../src" ]; then
+  exec node "$SCRIPT_DIR/install/index.js" "$@"
 fi
 
 fail() {
